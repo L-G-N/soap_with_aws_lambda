@@ -1,0 +1,23 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AWS Serverless Spring Boot 2 API - com.lgntest::awslambda
+Globals:
+  Api:
+    EndpointConfiguration: REGIONAL
+
+Resources:
+  AwslambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.lgn.StreamLambdaHandler::handleRequest
+      Runtime: java21
+      CodeUri: target/soapWithSpringBoot-0.0.1-SNAPSHOT-lambda-package.zip
+      MemorySize: 512
+      Policies: AWSLambdaBasicExecutionRole
+      Timeout: 60
+      Events:
+        ProxyResource:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: any
